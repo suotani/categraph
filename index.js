@@ -51,6 +51,20 @@ class Arrow {
     }
 }
 
+class Id {
+    constructor(x,y,label){
+        this.x = x;
+        this.y = y;
+    }
+    drawObject(){
+        push();
+        text("id", this.x, this.y - 25);
+        noFill();
+        arc(this.x, this.y, 30, 30, TWO_PI/3, PI/3);
+        pop();
+    }
+}
+
 class Category{
     constructor(x,y,r, label){
         this.x = x;
@@ -79,6 +93,7 @@ function setup() {
     radio = createRadio();
     radio.option('対象', "target");
     radio.option('射', "function");
+    radio.option('恒等射', "id");
     radio.option('関手', "functor");
     radio.option('自然変換', "nat");
     radio.option('圏', "category");
@@ -110,6 +125,12 @@ function draw() {
             case "target":
               point(fromX, fromY);
               break;
+            case "id":
+                push();
+                noFill();
+                arc(mouseX, mouseY, 30, 30, TWO_PI/3, PI/3);
+                pop();
+              break;
             case "category":
               push();
               noFill();
@@ -133,14 +154,17 @@ function mouseClicked(){
     if(mouseX < w && mouseY < h){
         switch(radio.value()){
             case "target":
-            objects.push(new Target(fromX, fromY, input.value()));
-            break;
+              objects.push(new Target(fromX, fromY, input.value()));
+              break;
+            case "id":
+              objects.push(new Id(mouseX, mouseY));
+              break;
             case "category":
-            objects.push(new Category((fromX + mouseX)/2, (fromY+mouseY)/2, abs(fromX - mouseX), input.value()));
-            break;
+              objects.push(new Category((fromX + mouseX)/2, (fromY+mouseY)/2, abs(fromX - mouseX), input.value()));
+              break;
             default:
-            objects.push(new Arrow(fromX, fromY, mouseX, mouseY, radio.value(), input.value()));
-            break;
+              objects.push(new Arrow(fromX, fromY, mouseX, mouseY, radio.value(), input.value()));
+              break;
         }
     }
 }
